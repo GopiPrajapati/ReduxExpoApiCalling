@@ -1,29 +1,41 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { ThemeProvider } from "@react-navigation/native";
+import { Tabs } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import "react-native-reanimated";
+import { Provider, useSelector } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistore, store } from "../redux/store";
+import { colors } from "../src/commonutils/theme";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  // You can also create your own custom theme if you want!
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  const CustomComponent = () => {
+    const isDarkMode = useSelector((state) => state.global.isDarkMode);
+    const theme = isDarkMode ? colors.dark : colors.light;
+    return (
+      <ThemeProvider value={theme}>
+        <Tabs>
+          <Tabs.Screen name="index" options={{ title: "Home" }} />
+          <Tabs.Screen name="about" options={{ title: "About" }} />
+        </Tabs>
+        <StatusBar style={isDarkMode ? "light" : "dark"} />
+      </ThemeProvider>
+    );
+  };
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Provider store={store}>
+      <PersistGate persistor={persistore}>
+        {/* <ThemeProvider value={theme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style={isDarkMode ? "light" : "dark"} />
+        </ThemeProvider> */}
+        <CustomComponent />
+      </PersistGate>
+    </Provider>
   );
 }
