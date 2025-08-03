@@ -1,3 +1,7 @@
+import API, {
+  apiConfig,
+  DevelopmentMode,
+} from "@/src/networking/NetworkService";
 import { ThemeProvider } from "@react-navigation/native";
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -7,8 +11,17 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistore, store } from "../redux/store";
 import { colors } from "../src/commonutils/theme";
 
+// const apiConfig = {
+//   productionBaseURL: "https://fakestoreapi.com",
+//   developmentBaseURL: "https://fakestoreapi.com",
+//   testingBaseURL: "https://fakestoreapi.com", // optional
+// };
+
 export default function RootLayout() {
   // You can also create your own custom theme if you want!
+
+  // API.getInstance().build(DevelopmentMode.PRODUCTION, apiConfig);
+  API.getInstance().build(DevelopmentMode.DEVELOPMENT, apiConfig);
 
   const CustomComponent = () => {
     const isDarkMode = useSelector((state) => state.global.isDarkMode);

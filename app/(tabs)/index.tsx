@@ -4,9 +4,10 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useTheme } from "@react-navigation/native";
 import { Image } from "expo-image";
+import { useEffect } from "react";
 import { Platform, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { setThemeMode } from "../../redux/actions/global";
+import { getProducts, setThemeMode } from "../../redux/actions/global";
 
 export default function HomeScreen() {
   const global = useSelector((state) => state?.global);
@@ -20,6 +21,27 @@ export default function HomeScreen() {
     const mode = !global?.isDarkMode ? "dark" : "light";
     dispatch(setThemeMode(mode));
   };
+
+  const focus = async () => {
+    dispatch(
+      getProducts({
+        SuccessCallback: (data) => {
+          console.log(
+            "Products fetched successfully:",
+            JSON.stringify(data, null, 4)
+          );
+        },
+        FailureCallback: (error) => {
+          console.error("Error fetching products:", error);
+        },
+      })
+    );
+  };
+
+  useEffect(() => {
+    console.log("HomeScreen useEffect called");
+    focus();
+  }, []);
 
   return (
     <ParallaxScrollView
