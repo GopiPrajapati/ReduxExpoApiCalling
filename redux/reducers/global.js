@@ -60,6 +60,13 @@ const global = (state = initialState, action) => {
         ...state,
         todoList: [...state.todoList, action.payload],
       };
+    case types.REMOVE_TODO:
+      return {
+        ...state,
+        todoList: state.todoList.filter(
+          (todo) => todo.userId !== action.payload.userId
+        ),
+      };
     default:
       return state;
   }

@@ -224,13 +224,23 @@ export default function HomeScreen() {
   // 🔹 Memoized List Item Component
 
   // 🔹 useMemo for Filtering (prevents unnecessary recalculations)
+  // const filteredData = useMemo(() => {
+  //   const search = searchText.toLowerCase();
+  //   return TodoList.filter(
+  //     (item: User) =>
+  //       item.userName.toLowerCase().includes(search) ||
+  //       item.userId.toLowerCase().includes(search) ||
+  //       item.userSurname.toLowerCase().includes(search)
+  //   );
+  // }, [searchText, TodoList]);
+
   const filteredData = useMemo(() => {
-    const search = searchText.toLowerCase();
+    const search = searchText.toLocaleLowerCase();
     return TodoList.filter(
       (item: User) =>
-        item.userName.toLowerCase().includes(search) ||
+        item.userName.toLocaleLowerCase().includes(search) ||
         item.userId.toLowerCase().includes(search) ||
-        item.userSurname.toLowerCase().includes(search)
+        item.userSurname.toLocaleLowerCase().includes(search)
     );
   }, [searchText, TodoList]);
 
