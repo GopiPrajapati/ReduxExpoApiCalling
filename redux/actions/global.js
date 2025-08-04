@@ -11,6 +11,11 @@ export const setThemeMode = (mode) => ({
   payload: mode,
 });
 
+export const addTodo = (todo) => ({
+  type: types.ADD_TODO,
+  payload: todo,
+});
+
 export const getProducts = ({ SuccessCallback, FailureCallback }) => {
   return (dispatch, getState) => {
     API.getInstance().Fetch(endpoints.getProducts, defaultHeaders, "", {
